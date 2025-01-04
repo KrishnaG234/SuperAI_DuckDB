@@ -18,7 +18,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const url = "http://localhost:8000";
+  const url = "https://superai-duckdb.onrender.com";
 
   const clearResults = () => {
     setCsvData([]);
