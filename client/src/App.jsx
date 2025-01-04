@@ -14,7 +14,7 @@ const App = () => {
   const [csvFile, setCsvFile] = useState(null);
   const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -22,7 +22,6 @@ const App = () => {
 
   const clearResults = () => {
     setCsvData([]);
-    setRowsPerPage(10);
     setSearchQuery("");
     setCurrentPage(1);
   };
@@ -158,7 +157,7 @@ const App = () => {
   };
 
   const paginate = (data) => {
-    const startIndex = (currentPage - 1) * rowsPerPage + 1;
+    const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     return data.slice(startIndex, endIndex);
   };
@@ -167,18 +166,15 @@ const App = () => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredData = csvData.filter((row) =>
+  const filteredData1 = csvData.filter((row) =>
     row.some((cell) =>
       cell.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
 
+  const filteredData = filteredData1.slice(1);
   const paginatedData = paginate(filteredData);
-
-  const totalPages =
-    filteredData.length <= rowsPerPage
-      ? 1
-      : Math.ceil(filteredData.length / rowsPerPage) ;
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
   const getRowIndex = (rowIndex) => {
     return (currentPage - 1) * rowsPerPage + rowIndex + 1;
@@ -351,20 +347,7 @@ const App = () => {
               </div>
 
               <div className="p-5 flex justify-between items-center">
-                <div className="flex-3">
-                  <label className="mr-3">Rows per page:</label>
-                  <select
-                    className="border rounded-md p-2"
-                    value={rowsPerPage}
-                    onChange={(e) => setRowsPerPage(Number(e.target.value))}
-                  >
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                  </select>
-                </div>
-
-                <div className="text-center flex-1">
+                <div className="text-left flex-1">
                   <span>
                     Page {currentPage} of {totalPages}
                   </span>
